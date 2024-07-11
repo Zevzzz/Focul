@@ -26,15 +26,18 @@ alerts = Alerts.Alerts()
 def showImg(img):
     cv2.imshow('Focul', img)
 
-    if cv2.waitKey(0) & 0xFF == 27:
+    if cv2.waitKey(33) & 0xFF == 27:
         cv2.destroyAllWindows()
 
 
 def getLandmarkData():
     img = camIn.captureImg()
-    # showImg(img)
-    return lmer.extractLandmarks(img)
-
+    landmarkData = lmer.extractLandmarks(img)
+    for landmark in landmarkData:
+        print(landmark)
+        img = cv2.circle(img, (int(landmark[0]), int(landmark[1])), 3, (255, 0, 0), 5)
+    showImg(img)
+    return landmarkData
 
 
 
@@ -61,7 +64,7 @@ if __name__ == '__main__':
     # camIn.startCap(0)
     # allLandmarks = []
     #
-    # durationSec = 1
+    # durationSec = 3
     #
     # startTime = time.time()
     # endTime = startTime + durationSec
@@ -73,8 +76,9 @@ if __name__ == '__main__':
     # print(f'Total Clusters Collected: {len(allLandmarks)}')
 
 
-    # landmarks = Landmarker.readLandmarks('src/data/focusedLandmarks.npy')
-
+    landmarks = Landmarker.readLandmarks('src/data/focusedLandmarks.npy')
+    print(landmarks)
+    print(len(landmarks))
 
 
 
