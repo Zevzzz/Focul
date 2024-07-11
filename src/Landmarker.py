@@ -33,7 +33,11 @@ class Landmarker():
                 landmarks.append([x, y, z, vis])
         return landmarks
 
-
+    def extractLandmarksFlattened(self, img):
+        landmarks = np.array(self.extractLandmarks(img))
+        landmarks = landmarks.reshape(len(landmarks), -1)
+        landmarks = landmarks.flatten()
+        return landmarks
 
 
 

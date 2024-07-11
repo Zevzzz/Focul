@@ -1,5 +1,6 @@
 
 import numpy as np
+import matplotlib.pyplot as plt
 import time
 from enum import Enum
 from src import GUI, CameraIn, Landmarker, NeuralNet, Configs, Alerts
@@ -16,12 +17,12 @@ class AppPageState(Enum):
 appPageState = AppPageState.HOME
 
 # Init components
-gui = GUI.GUI()
+# gui = GUI.GUI()
 camIn = CameraIn.CameraIn()
 lmer = Landmarker.Landmarker()
 nn = NeuralNet.NeuralNet()
-confs = Configs.Configs()
-alerts = Alerts.Alerts()
+# confs = Configs.Configs()
+# alerts = Alerts.Alerts()
 
 def showImg(img):
     cv2.imshow('Focul', img)
@@ -59,26 +60,56 @@ def getLandmarkData():
 #             pass
 
 
+def gatherPoints():
+    camIn.startCap(0)
+    allLandmarks = []
+
+    durationSec = 60
+
+    startTime = time.time()
+    endTime = startTime + durationSec
+
+    while time.time() < endTime:
+        allLandmarks.append(getLandmarkData())
+
+    Landmarker.writeLandmarks(allLandmarks, 'src/data/unfocusedLandmarks.npy')
+    print(f'Total Clusters Collected: {len(allLandmarks)}')
+
+
+
 
 if __name__ == '__main__':
-    # camIn.startCap(0)
-    # allLandmarks = []
-    #
-    # durationSec = 3
-    #
-    # startTime = time.time()
-    # endTime = startTime + durationSec
-    #
-    # while time.time() < endTime:
-    #     allLandmarks.append(getLandmarkData())
-    #
-    # Landmarker.writeLandmarks(allLandmarks, 'src/data/focusedLandmarks.npy')
-    # print(f'Total Clusters Collected: {len(allLandmarks)}')
+    # gatherPoints()
 
+    # focLandmarks = Landmarker.readLandmarks('src/data/focusedLandmarks.npy')
+    # print(focLandmarks)
+    # print(len(focLandmarks))
 
-    landmarks = Landmarker.readLandmarks('src/data/focusedLandmarks.npy')
-    print(landmarks)
-    print(len(landmarks))
+    # unfocLandmarks = Landmarker.readLandmarks('src/data/unfocusedLandmarks.npy')
+    # print(unfocLandmarks)
+    # print(len(unfocLandmarks))
+
+    # print(unfocLandmarks.shape)
+
+    # nn.trainModel(focLandmarks, unfocLandmarks)
+    # trainingHist = np.load('TRAINING_HIST_VAL_ACC.npy')
+
+    # plt.plot(trainingHist)
+    # plt.show()
+
+    camIn.startCap(0)
+    while True:
+        img = camIn.captureImg()
+        showImg(img)
+
+        try:
+            landmarks = lmer.extractLandmarksFlattened(img)
+        except ValueError:
+            print('No Landmarks Found')
+            continue
+
+        print(nn.predict(landmarks))
+
 
 
 
