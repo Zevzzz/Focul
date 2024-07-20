@@ -5,11 +5,11 @@ from keras.src.models import Sequential
 from keras.src import layers
 # from keras.regularizers import l1, l2
 from keras.src.callbacks import ModelCheckpoint, CSVLogger
-
+from keras.src.saving import load_model
 
 # Constants
 TRAIN_2_TEST_RATIO_SPLIT_PERC = 0.9
-MODEL_SAVE_PATH = 'data/model.h5'
+MODEL_SAVE_PATH = 'model.keras'
 
 EPOCHS = 30
 BATCH_SIZE = 64
@@ -17,6 +17,8 @@ BATCH_SIZE = 64
 
 class NeuralNet():
     def __init__(self):
+        self.loadedModel = load_model(MODEL_SAVE_PATH)
+
         # Building the model
         self.model = Sequential([])
 
@@ -24,10 +26,10 @@ class NeuralNet():
         # model.add(layers.Dense(units = 64, input_dim=len(pointsIn[0]), activation= 'relu')) # tune
         # model.add(layers.Dropout(0.5)) # tune
 
-        self.model.add(layers.Dense(units=32, activation='relu', input_dim=132))  # tune
-        self.model.add(layers.Dense(units=32, activation='relu'))
+        self.model.add(layers.Dense(units=64, activation='relu', input_shape=(132,)))  # tune
+        self.model.add(layers.Dense(units=64, activation='relu'))
         self.model.add(layers.Dropout(0.5))
-        self.model.add(layers.Dense(units=32, activation='relu'))
+        self.model.add(layers.Dense(units=64, activation='relu'))
 
         # Output layers
         self.model.add(layers.Dense(units=1, activation='sigmoid'))
@@ -67,7 +69,8 @@ class NeuralNet():
 
     def predict(self, landmarks):
         print(landmarks.shape)
-        return self.model.predict(landmarks)
+
+        return self.loadedModel.predict(landmarks)
 
 
 

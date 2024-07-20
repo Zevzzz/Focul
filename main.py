@@ -75,28 +75,22 @@ def gatherPoints():
     Landmarker.writeLandmarks(allLandmarks, 'src/data/unfocusedLandmarks.npy')
     print(f'Total Clusters Collected: {len(allLandmarks)}')
 
+def trainModel():
+    focLandmarks = Landmarker.readLandmarks('src/data/focusedLandmarks.npy')
+    print(focLandmarks)
+    print(len(focLandmarks))
 
+    unfocLandmarks = Landmarker.readLandmarks('src/data/unfocusedLandmarks.npy')
+    print(unfocLandmarks)
+    print(len(unfocLandmarks))
 
+    nn.trainModel(focLandmarks, unfocLandmarks)
+    trainingHist = np.load('TRAINING_HIST_VAL_ACC.npy')
 
-if __name__ == '__main__':
-    # gatherPoints()
+    plt.plot(trainingHist)
+    plt.show()
 
-    # focLandmarks = Landmarker.readLandmarks('src/data/focusedLandmarks.npy')
-    # print(focLandmarks)
-    # print(len(focLandmarks))
-
-    # unfocLandmarks = Landmarker.readLandmarks('src/data/unfocusedLandmarks.npy')
-    # print(unfocLandmarks)
-    # print(len(unfocLandmarks))
-
-    # print(unfocLandmarks.shape)
-
-    # nn.trainModel(focLandmarks, unfocLandmarks)
-    # trainingHist = np.load('TRAINING_HIST_VAL_ACC.npy')
-
-    # plt.plot(trainingHist)
-    # plt.show()
-
+def predictWithModel():
     camIn.startCap(0)
     while True:
         img = camIn.captureImg()
@@ -109,6 +103,16 @@ if __name__ == '__main__':
             continue
 
         print(nn.predict(landmarks))
+
+
+
+
+if __name__ == '__main__':
+    # gatherPoints()
+
+    # trainModel()
+
+    predictWithModel()
 
 
 
