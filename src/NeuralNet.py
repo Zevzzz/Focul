@@ -11,14 +11,15 @@ from keras.src.saving import load_model
 TRAIN_2_TEST_RATIO_SPLIT_PERC = 0.9
 MODEL_SAVE_PATH = 'model.keras'
 
-EPOCHS = 30
+EPOCHS = 50
 BATCH_SIZE = 64
 
 
-class NeuralNet():
-    def __init__(self):
-        self.loadedModel = load_model(MODEL_SAVE_PATH)
 
+class NeuralNet:
+    loadedModel = load_model(MODEL_SAVE_PATH)
+
+    def __init__(self):
         # Building the model
         self.model = Sequential([])
 
@@ -60,17 +61,26 @@ class NeuralNet():
         focAndUnfocPointsTrain = focAndUnfocPointsTrain.reshape(len(focAndUnfocPointsTrain), -1)
         focAndUnfocPointsTest = focAndUnfocPointsTest.reshape(len(focAndUnfocPointsTest), -1)
 
+        print(focAndUnfocPointsTrain.shape)
+        print(focAndUnfocPointsTest.shape)
+
         trainingLogs = self.model.fit(
             focAndUnfocPointsTrain, tagsTrain, epochs=EPOCHS, batch_size=BATCH_SIZE, validation_data=(focAndUnfocPointsTest, tagsTest))
         self.model.save(MODEL_SAVE_PATH)
 
-        np.save('TRAINING_HIST_VAL_ACC.npy', np.array(trainingLogs.history['val_accuracy']))
+        np.save('src/data/TRAINING_HIST_VAL_ACC.npy', np.array(trainingLogs.history['val_accuracy']))
 
+
+    def loadModel(self):
+        self.loadedModel = load_model(MODEL_SAVE_PATH)
+
+    def getModel(self):
+        return self.loadedModel
 
     def predict(self, landmarks):
-        print(landmarks.shape)
+        landmarksShaped = landmarks.reshape(1, 132)
 
-        return self.loadedModel.predict(landmarks)
+        return self.loadedModel.predict(landmarksShaped)
 
 
 

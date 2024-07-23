@@ -16,7 +16,7 @@ def readLandmarks(filepath):
     return landmarks
 
 
-class Landmarker():
+class Landmarker:
     def __init__(self):
         self.pose = mp.solutions.pose.Pose(static_image_mode = True, min_detection_confidence = 0.5)
 
