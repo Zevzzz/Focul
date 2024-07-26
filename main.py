@@ -1,9 +1,10 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
 import time
 from enum import Enum
-from src import GUI, CameraIO, Landmarker, NeuralNet, Configs, Alerts
 import cv2
+from src import GUI, CameraIO, Landmarker, NeuralNet, Configs, Alerts
 
 # Constants
 MAX_UNFOC_TIME_FOR_ALERT = 10
@@ -27,6 +28,8 @@ lmer = Landmarker.Landmarker()
 nn = NeuralNet.NeuralNet()
 # confs = Configs.Configs()
 # alerts = Alerts.Alerts()
+
+
 
 
 def getLandmarkData():
@@ -66,9 +69,9 @@ def gatherPoints(isFocused, durationSec):
         allLandmarks.append(getLandmarkData())
 
     if isFocused:
-        Landmarker.writeLandmarks(allLandmarks, 'src/data/focusedLandmarks.npy')
+        Landmarker.writeLandmarks(allLandmarks, 'src\\data\\focusedLandmarks.npy')
     else:
-        Landmarker.writeLandmarks(allLandmarks, 'src/data/unfocusedLandmarks.npy')
+        Landmarker.writeLandmarks(allLandmarks, 'src\\data\\unfocusedLandmarks.npy')
     print(f'Total Clusters Collected: {len(allLandmarks)}')
 
     camIO.destroyAllWindows()
@@ -82,20 +85,22 @@ def gatherPointsUnfoc():
 
 
 def trainModel():
-    focLandmarks = Landmarker.readLandmarks('src/data/focusedLandmarks.npy')
-    print(focLandmarks)
-    print(len(focLandmarks))
+    if gui.askStartTraining():
+        focLandmarks = Landmarker.readLandmarks('src\\data\\focusedLandmarks.npy')
+        print(focLandmarks)
+        print(len(focLandmarks))
 
-    unfocLandmarks = Landmarker.readLandmarks('src/data/unfocusedLandmarks.npy')
-    print(unfocLandmarks)
-    print(len(unfocLandmarks))
+        unfocLandmarks = Landmarker.readLandmarks('src\\data\\unfocusedLandmarks.npy')
+        print(unfocLandmarks)
+        print(len(unfocLandmarks))
 
-    if len(focLandmarks) > 0 and len(unfocLandmarks) > 0:
-        nn.trainModel(focLandmarks, unfocLandmarks)
-        trainingHist = np.load('src/data/TRAINING_HIST_VAL_ACC.npy')
+        if len(focLandmarks) > 0 and len(unfocLandmarks) > 0:
+            nn.trainModel(focLandmarks, unfocLandmarks)
+            trainingHist = np.load('src\\data\\TRAINING_HIST_VAL_ACC.npy')
 
-        # plt.plot(trainingHist)
-        # plt.show()
+            # plt.plot(trainingHist)
+            # plt.show()
+        gui.popupDoneTraining()
 
 
 def predictWithModel(img):
@@ -103,7 +108,7 @@ def predictWithModel(img):
         landmarks = lmer.extractLandmarksFlattened(img)
         nn.loadModel()
         return nn.predict(landmarks)[0][0]
-    except ValueError:
+    except ValueError or AttributeError:
         print('No Landmarks Found')
         return None
 
@@ -113,6 +118,7 @@ def startPredicting():
 
     while True:
         img = camIO.getImg()
+        print(img.shape)
         pred = predictWithModel(img)
         if not pred:
             continue
@@ -135,9 +141,11 @@ def startPredicting():
         try:
             if cv2.getWindowProperty('Focul', 0) == -1:
                 cv2.destroyAllWindows()
+                camIO.release()
                 break
         except cv2.error:
             cv2.destroyAllWindows()
+            camIO.release()
             break
 
 
