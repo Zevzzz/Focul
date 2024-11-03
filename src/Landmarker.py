@@ -4,11 +4,14 @@ import numpy as np
 
 
 def writeLandmarks(landmarks, filepath):
-    tempArr = []
-    for cluster in landmarks:
-        if cluster:
-            tempArr.append(cluster)
-    np.save(filepath, tempArr)
+    np.save(filepath, landmarks)
+    # tempArr = []
+    # for cluster in landmarks:
+        # print(cluster)
+        # if cluster != 0 or len(cluster) > 0:
+        #     tempArr.append(cluster)
+        # pass
+    # np.save(filepath, tempArr)
 
 
 def readLandmarks(filepath):
