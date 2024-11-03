@@ -6,6 +6,7 @@ from keras.src import layers
 # from keras.regularizers import l1, l2
 from keras.src.callbacks import ModelCheckpoint, CSVLogger
 from keras.src.saving import load_model
+from os import remove
 
 # Constants
 TRAIN_2_TEST_RATIO_SPLIT_PERC = 0.9
@@ -42,8 +43,13 @@ class NeuralNet:
     def trainModel(self, focPointsIn, unfocPointsIn):
         focPoints = focPointsIn.copy()
         unfocPoints = unfocPointsIn.copy()
+
         np.random.shuffle(focPoints)
         np.random.shuffle(unfocPoints)
+
+        min_size = min(len(focPoints), len(unfocPoints))
+        focPoints = focPoints[:min_size]
+        unfocPoints = unfocPoints[:min_size]
 
         focSplitPoint = int(len(focPoints) * TRAIN_2_TEST_RATIO_SPLIT_PERC)
         focPointsTrain = focPoints[:focSplitPoint]
@@ -65,7 +71,13 @@ class NeuralNet:
         print(focAndUnfocPointsTest.shape)
 
         trainingLogs = self.model.fit(
-            focAndUnfocPointsTrain, tagsTrain, epochs=EPOCHS, batch_size=BATCH_SIZE, validation_data=(focAndUnfocPointsTest, tagsTest))
+            focAndUnfocPointsTrain, tagsTrain, epochs=EPOCHS, batch_size=BATCH_SIZE,
+            validation_data=(focAndUnfocPointsTest, tagsTest))
+
+        try:
+            remove('model.keras')
+        except FileNotFoundError:
+            pass
         self.model.save(MODEL_SAVE_PATH)
 
         np.save('src/data/TRAINING_HIST_VAL_ACC.npy', np.array(trainingLogs.history['val_accuracy']))
