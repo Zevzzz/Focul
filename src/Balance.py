@@ -3,6 +3,7 @@ class Balance:
     MIN_TO_DOLLAR_MULTIPLIER = 2/60
 
     PENALTY_MIN_FOR_ALERT = 5
+    PENALTY_MONEY_FOR_ALERT = 0.25
 
     def __init__(self, balanceFilepath):
         self.balanceFilpath = balanceFilepath

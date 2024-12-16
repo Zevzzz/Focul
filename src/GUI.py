@@ -81,8 +81,8 @@ class GUI:
     def popupDoneTraining(self):
         messagebox.showinfo('FINISHED!', 'Training is complete!')
 
-    def popupFocusWarning(self):
-        messagebox.showwarning('Please remain focused!', 'Stay focused please!')
+    def popupFocusWarning(self, balDetectAmount):
+        messagebox.showwarning(f'Please remain focused!', f'Stay focused please! \n{balDetectAmount}$ has been deducted from your balance!')
 
     def popupAskSamplingDurationMin(self, defaultSamplingDuration):
         inputtedDuration = simpledialog.askfloat("Input Sampling Duration (minutes)", "Enter duration (minutes):")

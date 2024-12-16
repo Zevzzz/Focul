@@ -7,7 +7,7 @@ import cv2
 from src import GUI, CameraIO, Landmarker, NeuralNet, Configs, Alerts, Balance
 
 # Constants
-MAX_UNFOC_TIME_FOR_ALERT = 10
+MAX_UNFOC_TIME_FOR_ALERT = 30
 DEFAULT_RECORDING_TIME_SEC = 60
 
 # App states
@@ -227,9 +227,10 @@ def startPredicting():
             totalFocusTime += (time.time() - lastIterTime)
         elif pred > 0.5 and abs(time.time() - lastFoc) > MAX_UNFOC_TIME_FOR_ALERT:
             hasAlerted = True
-            totalFocusTime -= bal.PENALTY_MIN_FOR_ALERT * 60
+            # totalFocusTime -= bal.PENALTY_MIN_FOR_ALERT * 60
+            bal.changeBal(-1.0 * bal.PENALTY_MONEY_FOR_ALERT)
 
-            gui.popupFocusWarning()
+            gui.popupFocusWarning(bal.PENALTY_MONEY_FOR_ALERT)
             lastFoc = time.time()
 
         # Last iter timer for balance changes
@@ -247,7 +248,7 @@ def startPredicting():
 
         # Check to exit loop
         try:
-            if cv2.getWindowProperty("Focul", cv2.WND_PROP_VISIBLE) < 1:
+            if cv2.getWindowProperty("Focul", cv2.WND_PROP_VISIBLE) == 0:
                 sessionEndTime = time.time()
                 cv2.destroyAllWindows()
                 camIO.release()
@@ -272,8 +273,9 @@ def showBalance():
 
 def updateBalanceManually():
     changeAmount = gui.popupAskBalanceUpdateAmt()
-    bal.changeBal(changeAmount)
-    gui.popupBalanceAmtUpdated()
+    if changeAmount:
+        bal.changeBal(changeAmount)
+        gui.popupBalanceAmtUpdated()
 
 
 
