@@ -2,9 +2,9 @@
 *A personalized ADHD focus assistant powered by computer vision and machine learning.*
 
 ## Overview
-Focul is a computer application designed to help users who struggle with focusing or staying on task. It was especially designed for those who struggle with ADHD related focus issues. By using body landmark detection and a personalized neural network trained on each user's unique body language and body focus cues, Focul recognizes signs of distration and gently reminds users to refocus. 
+Focul is a computer application designed to help users who struggle with focusing or staying on task. It was especially designed for those who struggle with ADHD related focus issues. By using body landmark detection and a personalized neural network trained on each user's unique body language and body focus cues, Focul recognizes signs of distraction  and gently reminds users to refocus. 
 
-Unlike many other productivity apps, Focul is truly personalized for each user, adapting to unique body language an habits, making it an intuitive and personal tool for focusing. 
+Unlike many other productivity apps, Focul is truly personalized for each user, adapting to unique body language and habits, making it an intuitive and personal tool for focusing. 
 
 ### Features
 - **Personalized Focus Detection** - Focul tracks the posture and various micro-movements of users (eyes, shoulders, face, etc.) to distinguish between focused and unfocused states
@@ -21,8 +21,8 @@ https://docs.google.com/document/u/0/d/1B17id3WCf5vyWAENmyov5GPuiHPFEj3u/mobileb
 After downloading the `.exe` file, simply run it to start Focul. A black terminal will open, do not close it as this will cause Focul to close. After a few seconds, the app UI will appear. 
 
 To train a custom profile
-1. Record a focused video. Click on the first button, “Record Focus Video”, the app will start to record 60 seconds of video and show the following webcam window, this will be used to train the AI engine, essentially teaching the engine on your focused gestures during study time. Please find a posture that you usually use during study time, like looking at your monitor, or look at your book. Feel free to record multiple gestures within the 60 seconds window, and you can click on the button again to re-record.
-2. Record an Unfocused Video. Click on the second button, “Record Unfocused Video”, the app will start to record 60 seconds of video and show the follow webcam window. This will also be used to train the AI engine, so it learns to recognize posture patterns when you are not focused on studying, like playing with your phone, looking around, etc. Feel free to record multiple gestures within the 60 seconds window, and you can click on the button again to re-record.
+1. Record a focused video. Click on the first button, “Record Focus Video”, the app will start to record 60 seconds of video and a webcam window. This will be used to train the AI engine, essentially teaching the engine on your focused gestures during study time. Please find a posture that you usually use during study time, like looking at your monitor, or look at your book. Feel free to record multiple gestures within the 60 seconds window, and you can click on the button again to re-record.
+2. Record an Unfocused Video. Click on the second button, “Record Unfocused Video”, the app will start to record 60 seconds of video and show a webcam window. This will also be used to train the AI engine, so it learns to recognize posture patterns when you are not focused on studying, like playing with your phone, looking around, etc. Feel free to record multiple gestures within the 60 seconds window, and you can click on the button again to re-record.
 3. Train your AI model. Click on the 3rd button “Train Model with Recordings”, this will trigger the AI engine to train it self (learn your gestures) based on the recorded videos. The training will take a few seconds and a popup will indicate it is completed. Click on OK to dismiss the pooup.
 
 Now you are ready to use Focul!
